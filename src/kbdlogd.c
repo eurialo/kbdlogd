@@ -85,11 +85,11 @@ void main (int argc, char **argv)
                 debug_flag = 0;
                 break;
             case 'i':
-                snprintf(device, sizeof(device), "%s", optarg);
+                snprintf(device, sizeof(device) - 1, "%s", optarg);
                 break;
             case 'o':
                 // Set alternate logfile.
-                snprintf(outfd, sizeof(outfd), "%s", optarg);
+                snprintf(outfd, sizeof(outfd) - 1, "%s", optarg);
                 break;
             case 'u':
                 // Set the time update of
@@ -105,7 +105,7 @@ void main (int argc, char **argv)
 
     // Print the version.
     if (version_flag) {
-        snprintf(vbuf, (65 + strlen(KBDL_NAME) + strlen(KBDL_VERS)), 
+        snprintf(vbuf, (50 + strlen(KBDL_NAME) + strlen(KBDL_VERS)), 
             "%s version %s.\n", KBDL_NAME, KBDL_VERS);
 
         printf("%s", vbuf);
